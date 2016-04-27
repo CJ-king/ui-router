@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html >
+<head>
+	<meta charset="UTF-8">
+	<title>多层嵌套路由</title>
+	<style>
+	html,body,ul,li{margin: 0;padding: 0;}
+	li{list-style: none;}
+	a{
+		text-decoration: none;
+		color: #000;
+	}
+	.head{
+		height: 120px;
+		background-color: #99CCCC;
+		line-height: 120px;
+		text-align: center;
+		font-size: 30px;
+		font-weight: bolder;
+	}
+	.content{
+		position: absolute;
+		top: 120px;
+		bottom: 80px;
+		width: 100%;
+		background-color: #FFCCCC;
+	}
+	.content .menu{
+		height: 100%;
+		width: 200px;
+		background-color: #FF9966;
+		overflow: hidden;
+	}
+	.content .menu li{
+		text-align: center;
+		height: 30px;
+		margin: 3px 0;
+	}
+	.content .menu li a{
+		display: inline-block;
+		width: 100%;
+		height: 100%;
+		line-height: 30px;
+		background-color: #FF6666;
+		text-decoration: none;
+	}
+	.content .menu li a.active,.content .menu li a:hover{
+		color:#ffffff;
+		background-color: #CCCC00;
+	}
+	.content .info{
+		position: absolute;
+		top:0;
+		left: 200px;
+		right: 0;
+		bottom: 0;
+	}
+	.footer{
+		position: fixed;
+		bottom: 0;
+		width: 100%;
+		height: 80px;
+		background-color: #FFCC99;
+		line-height: 80px;
+		text-align: center;
+		font-size: 25px;
+		font-weight: bolder;
+	}
+	</style>
+</head>
+<body ng-app="customaApp">
+	<!-- 头部 -->
+	<div ui-view="head" class="head"></div>
+	<!-- 内容 -->
+    <div ui-view="vcon" class="content">
+    </div>
+    <!-- 页尾 -->
+    <div ui-view="footer" class="footer">
+    </div>
+    <script type="text/javascript" src="lib/angular.js"></script>
+    <script type="text/javascript" src="lib/angular-ui-router.js"></script>
+    <script type="text/javascript">
+    	var app=angular.module("customaApp",['ui.router']);
+		app.config(['$stateProvider', '$urlRouterProvider','$httpProvider',
+	    function($stateProvider, $urlRouterProvider,$httpProvider) {
+	    	$urlRouterProvider.when('/','/home/menu1').otherwise('/home/menu1');
+			$stateProvider.state('index',{
+		    	url: '/',
+		    	views: {
+		            'head': {
+	                	templateUrl: 'template/head.html'
+		            },
+		            'vcon': {
+		                templateUrl: 'template/cont.html'
+		            },
+		            'footer': {
+		                templateUrl: 'template/footer.html'
+		            },
+		            
+		        }
+		        }).state('index.home',{
+		    	url: 'home',
+		    	views: {
+		            'menu': {
+		                templateUrl: 'template/menu.html'
+		            },
+		            
+		        }
+		        })
+		        .state('index.home.menu1',{
+		    	url: '/menu1',
+		    	views: {
+		            'info@index': {//'@'后是一个状态名，总结下其实就是名称为'info'的这个视图所在的模板在哪个状态下被引入就是哪个状态名，多做实验体会下。
+		                templateUrl: 'template/menu1.html'
+		            },
+		            
+		        }
+		        }).state('index.home.menu2',{
+		    	url: '/menu2',
+		    	views: {
+		            'info@index': {
+		                templateUrl: 'template/menu2.html'
+		            },
+		            
+		        }
+		        }).state('index.home.menu3',{
+		    	url: '/menu3',
+		    	views: {
+		            'info@index': {
+		                templateUrl: 'template/menu3.html'
+		            },
+		            
+		        }
+		        });
+			}]);
+    </script>
+</body>
+</html>
